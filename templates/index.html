@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Logout Button Styling */
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff2b40;
+            color: rgb(235, 235, 235);
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-banner h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner p {
+            font-size: 1.2em;
+        }
+
+        /* Navigation Links */
+        nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        /* Common Button Styling */
+        nav ul li a {
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            color: rgb(255, 255, 255);
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        /* Add Expense Button */
+        .add-expense-btn {
+            background-color: #28a745; /* Green */
+        }
+
+        .add-expense-btn:hover {
+            background-color: #218838; /* Darker Green */
+        }
+
+        /* View Expenses Button */
+        .view-expenses-btn {
+            background-color: #007bff; /* Blue */
+        }
+
+        .view-expenses-btn:hover {
+            background-color: #0056b3; /* Darker Blue */
+        }
+
+        /* Filter Expenses Button */
+        .filter-expenses-btn {
+            background-color: #ffc107; /* Yellow */
+            color: #333; /* Dark text color for yellow */
+        }
+
+        .filter-expenses-btn:hover {
+            background-color: #e0a800; /* Darker Yellow */
+        }
+
+        /* Introductory Section */
+        .intro-section {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #7ede64;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .intro-section h2 {
+            color: #007bff;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .intro-section p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="{{ url_for('home') }}" class="logout-btn">Logout</a>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <h1>Welcome to Expense Tracker</h1>
+        <p>Manage your finances easily and efficiently</p>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('add_expense_page') }}" class="nav-btn add-expense-btn">Add Expense</a></li>
+            <li><a href="{{ url_for('view_expenses_page') }}" class="nav-btn view-expenses-btn">View Expenses</a></li>
+            <li><a href="{{ url_for('filter_expenses_page') }}" class="nav-btn filter-expenses-btn">Filter Expenses</a></li>
+        </ul>
+    </nav>
+
+    <!-- Introductory Section -->
+    <div class="intro-section">
+        <h2>Track Your Expenses</h2>
+        <p>Our Expense Tracker app helps you monitor your spending habits, set budgets, and save money.</p>
+        <p>Get started by adding your first expense or viewing your existing expenses!</p>
+    </div>
+
+</body>
+</html>
