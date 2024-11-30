@@ -12,7 +12,7 @@ app.config.from_object(Config)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'  # Replace with your MySQL username
-app.config['MYSQL_PASSWORD'] = '12345'  # Replace with your MySQL password
+app.config['MYSQL_PASSWORD'] = 'root'  # Replace with your MySQL password
 app.config['MYSQL_DB'] = 'expense_tracker'
 mysql = MySQL(app)
 
@@ -127,7 +127,7 @@ def create_connection():
     return mysql.connector.connect(
         host='localhost',
         user='root',  # Replace with your MySQL username
-        password='12345',  # Replace with your MySQL password
+        password='root',  # Replace with your MySQL password
         database='expense_tracker'  # Replace with your database name
     )
 

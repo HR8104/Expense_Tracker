@@ -9,7 +9,7 @@ def add_expense(name, amount, category, date):
         connection = mysql.connector.connect(
             host='localhost',
             user='root',  # Replace with your MySQL username
-            password='12345',  # Replace with your MySQL password
+            password='root',  # Replace with your MySQL password
             database='expense_tracker'  # Replace with your database name
         )
         cursor = connection.cursor()
@@ -35,7 +35,7 @@ def view_expenses():
         connection = mysql.connector.connect(
             host='localhost',
             user='root',  # Replace with your MySQL username
-            password='12345',  # Replace with your MySQL password
+            password='root',  # Replace with your MySQL password
             database='expense_tracker'  # Replace with your database name
         )
         cursor = connection.cursor()
@@ -62,7 +62,7 @@ def create_connection():
     return mysql.connector.connect(
         host='localhost',
         user='root',  # Replace with your MySQL username
-        password='12345',  # Replace with your MySQL password
+        password='root',  # Replace with your MySQL password
         database='expense_tracker'  # Replace with your database name
     )
 

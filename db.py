@@ -9,7 +9,7 @@ def create_connection():
     return mysql.connector.connect(
         host="localhost",      # MySQL server host
         user="root",  # MySQL username
-        password="12345",  # MySQL password
+        password="root",  # MySQL password
         database="expense_tracker"  # Database name
     )
 
