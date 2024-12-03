@@ -1,23 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import mysql.connector
-from expense import add_expense, view_expenses, filter_expenses
-from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
+from datetime import datetime
 from flask_mysqldb import MySQL
+from config import Config
+from setup_db import setup_database
+from expense import add_expense, view_expenses, filter_expenses
 
+# Trigger database setup
+setup_database()
+
+# Initialize the Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
 
-
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'  # Replace with your MySQL username
-app.config['MYSQL_PASSWORD'] = '12345'  # Replace with your MySQL password
-app.config['MYSQL_DB'] = 'expense_tracker'
+# Initialize the MySQL database``
 mysql = MySQL(app)
 
 # Home route (This will now render dashboard.html instead of index.html)
-@app.route('/dashboard')
+@app.route('/')
 def home():
     return render_template('dashboard.html')
 
@@ -43,7 +43,6 @@ def register():
     
     return render_template('register.html')
 
-
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -67,10 +66,10 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/')
+# Index route (This will now render index.html with options)
+@app.route('/index')
 def index():
     return render_template('index.html')
-
 
 # Add expense route
 @app.route('/add', methods=['GET', 'POST'])
@@ -88,7 +87,6 @@ def add_expense_page():
 # View expenses route
 @app.route('/view')
 def view_expenses_page():
-
     # Fetch expenses from the database
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM expenses")
@@ -111,7 +109,7 @@ def view_expenses_page():
 
     return render_template('view_expenses.html', expenses=expenses, total_expense=total_expense, total_by_category=total_by_category)
 
-
+# Delete expense route
 @app.route('/delete_expense/<int:expense_id>', methods=['POST'])
 def delete_expense(expense_id):
     cur = mysql.connection.cursor()
@@ -122,42 +120,7 @@ def delete_expense(expense_id):
     flash('Expense deleted successfully!', 'success')
     return redirect(url_for('view_expenses_page'))
 
-# Function to create a database connection
-def create_connection():
-    return mysql.connector.connect(
-        host='localhost',
-        user='root',  # Replace with your MySQL username
-        password='12345',  # Replace with your MySQL password
-        database='expense_tracker'  # Replace with your database name
-    )
-
-# Function to filter expenses based on category, start_date, and end_date
-def filter_expenses(category=None, start_date=None, end_date=None):
-    # Use MySQL connection from flask_mysqldb (no need to use mysql.connector)
-    cur = mysql.connection.cursor()
-
-    query = 'SELECT * FROM expenses WHERE 1=1'
-    params = []
-
-    if category:
-        query += ' AND category = %s'
-        params.append(category)
-    
-    if start_date:
-        query += ' AND date >= %s'
-        params.append(start_date)
-    
-    if end_date:
-        query += ' AND date <= %s'
-        params.append(end_date)
-
-    cur.execute(query, tuple(params))
-    expenses = cur.fetchall()
-
-    cur.close()
-    
-    return expenses
-
+# Filter expenses route
 @app.route('/filter', methods=['GET', 'POST'])
 def filter_expenses_page():
     expenses = []
@@ -188,11 +151,12 @@ def filter_expenses_page():
     
     return render_template('filter_expenses.html', expenses=expenses)
 
+# Logout route
 @app.route('/logout')
 def logout():
     session.clear()  # Clear the session data
     flash('You have been logged out.', 'info')
-    return redirect(url_for('home'))  # Redirect to the home page (index.html)
+    return redirect(url_for('home'))  # Redirect to the home page (dashboard.html)
 
 # Run the Flask app
 if __name__ == "__main__":

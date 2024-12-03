@@ -1,104 +1,92 @@
-# expense.py
-
 from db import create_connection
 
-import mysql.connector
-
 def add_expense(name, amount, category, date):
+    """
+    Add an expense to the database.
+    """
     try:
-        connection = mysql.connector.connect(
-            host='localhost',
-            user='root',  # Replace with your MySQL username
-            password='12345',  # Replace with your MySQL password
-            database='expense_tracker'  # Replace with your database name
-        )
-        cursor = connection.cursor()
+        conn = create_connection()
+        cursor = conn.cursor()
 
         # SQL query to insert the expense
         query = "INSERT INTO expenses (name, amount, category, date) VALUES (%s, %s, %s, %s)"
         values = (name, amount, category, date)
         cursor.execute(query, values)
-        connection.commit()
+        conn.commit()
 
         print(f"Expense '{name}' added successfully!")  # Debug log
         
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
+    except Exception as err:
+        print(f"Error while adding expense: {err}")
     finally:
         cursor.close()
-        connection.close()
-
-import mysql.connector
+        conn.close()
 
 def view_expenses():
+    """
+    Retrieve all expenses from the database.
+    """
     try:
-        connection = mysql.connector.connect(
-            host='localhost',
-            user='root',  # Replace with your MySQL username
-            password='12345',  # Replace with your MySQL password
-            database='expense_tracker'  # Replace with your database name
-        )
-        cursor = connection.cursor()
+        conn = create_connection()
+        cursor = conn.cursor()
 
         # SQL query to fetch all expenses
         query = "SELECT * FROM expenses"
         cursor.execute(query)
-        expenses = cursor.fetchall()  # This should return a list of tuples
+        expenses = cursor.fetchall()  # Returns a list of tuples
 
-        print(f"Fetched expenses: {expenses}")  # Debug log
-        return expenses  # Make sure this is not None or empty
+        # Debug log
+        print(f"Fetched expenses: {expenses}")
+        return expenses
 
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-        return []  # Return an empty list in case of error
+    except Exception as err:
+        print(f"Error while fetching expenses: {err}")
+        return []  # Return an empty list if an error occurs
     finally:
         cursor.close()
-        connection.close()
-
-
-import mysql.connector
-
-def create_connection():
-    return mysql.connector.connect(
-        host='localhost',
-        user='root',  # Replace with your MySQL username
-        password='12345',  # Replace with your MySQL password
-        database='expense_tracker'  # Replace with your database name
-    )
+        conn.close()
 
 def filter_expenses(category=None, start_date=None, end_date=None):
     """
     Filter expenses by category and/or date range.
     """
-    conn = create_connection()
-    cursor = conn.cursor()
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
 
-    query = 'SELECT * FROM expenses WHERE 1=1'
-    params = []
+        # Build dynamic SQL query
+        query = "SELECT * FROM expenses WHERE 1=1"
+        params = []
 
-    if category:
-        query += ' AND category = %s'
-        params.append(category)
-    
-    if start_date:
-        query += ' AND date >= %s'
-        params.append(start_date)
-    
-    if end_date:
-        query += ' AND date <= %s'
-        params.append(end_date)
+        if category:
+            query += " AND category = %s"
+            params.append(category)
+        
+        if start_date:
+            query += " AND date >= %s"
+            params.append(start_date)
+        
+        if end_date:
+            query += " AND date <= %s"
+            params.append(end_date)
 
-    # Debug: print the query and parameters
-    print(f"Executing query: {query} with params: {params}")
+        # Debug log
+        print(f"Executing query: {query} with params: {params}")
+        cursor.execute(query, tuple(params))
+        expenses = cursor.fetchall()
 
-    cursor.execute(query, tuple(params))
-    expenses = cursor.fetchall()
+        if expenses:
+            # Debug log for filtered results
+            for expense in expenses:
+                print(f"ID: {expense[0]}, Name: {expense[1]}, Amount: {expense[2]}, Category: {expense[3]}, Date: {expense[4]}")
+        else:
+            print("No expenses found for the given filter criteria.")  # Debug message if no results
 
-    if expenses:
-        for expense in expenses:
-            print(f"ID: {expense[0]}, Name: {expense[1]}, Amount: {expense[2]}, Category: {expense[3]}, Date: {expense[4]}")
-    else:
-        print("No expenses found for the given filter criteria.")  # Debug message if no results are found
+        return expenses
 
-    cursor.close()
-    conn.close()
+    except Exception as err:
+        print(f"Error while filtering expenses: {err}")
+        return []  # Return an empty list if an error occurs
+    finally:
+        cursor.close()
+        conn.close()

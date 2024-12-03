@@ -7,100 +7,126 @@
     <!-- <link rel="stylesheet" href="../assets/css/index.css"> Link to your CSS file -->
     <style>
         /* General Styling */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-/* Welcome Banner */
-.welcome-banner {
-    text-align: center;
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
+        /* Welcome Banner */
+        .welcome-banner {
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
 
-.welcome-banner h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-}
+        .welcome-banner h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
 
-.welcome-banner p {
-    font-size: 1.2em;
-}
+        .welcome-banner p {
+            font-size: 1.2em;
+        }
 
-/* Style for the container holding the buttons */
-.auth-buttons {
-    display: flex;
-    justify-content: center;  /* Center buttons horizontally */
-    gap: 20px;                /* Space between the buttons */
-    margin-top: 20px;         /* Margin at the top */
-}
+        /* Style for the container holding the buttons */
+        .auth-buttons {
+            display: flex;
+            justify-content: center;  /* Center buttons horizontally */
+            gap: 20px;                /* Space between the buttons */
+            margin-top: 20px;         /* Margin at the top */
+        }
 
-/* Common button styles */
-.auth-buttons a {
-    display: inline-block;
-    padding: 12px 25px;
-    font-size: 16px;
-    text-decoration: none;  /* Remove underline */
-    text-align: center;     /* Center the text */
-    border-radius: 5px;     /* Round corners */
-    transition: all 0.3s ease; /* Smooth transition for hover effect */
-}
+        /* Common button styles */
+        .auth-buttons a {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 16px;
+            text-decoration: none;  /* Remove underline */
+            text-align: center;     /* Center the text */
+            border-radius: 5px;     /* Round corners */
+            transition: all 0.3s ease; /* Smooth transition for hover effect */
+        }
 
-/* Style for the Login button */
-.login-button {
-    background-color: #007bff;  /* Blue background */
-    color: white;               /* White text */
-    font-weight: bold;
-}
+        /* Style for the Login button */
+        .login-button {
+            background-color: #007bff;  /* Blue background */
+            color: white;               /* White text */
+            font-weight: bold;
+        }
 
-.login-button:hover {
-    background-color: #0056b3;  /* Darker blue on hover */
-}
+        .login-button:hover {
+            background-color: #0056b3;  /* Darker blue on hover */
+        }
 
-/* Style for the Register button */
-.register-button {
-    background-color: #ffc107;  /* Yellow background */
-    color: #333;                /* Dark text */
-    font-weight: bold;
-}
+        /* Style for the Register button */
+        .register-button {
+            background-color: #ffc107;  /* Yellow background */
+            color: #333;                /* Dark text */
+            font-weight: bold;
+        }
 
-.register-button:hover {
-    background-color: #e0a800;  /* Darker yellow on hover */
-}
+        .register-button:hover {
+            background-color: #e0a800;  /* Darker yellow on hover */
+        }
 
-/* Introductory Section */
-.intro-section {
-    text-align: center;
-    max-width: 600px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        /* Introductory Section */
+        .intro-section {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.intro-section h2 {
-    color: #007bff;
-    font-size: 1.8em;
-    margin-bottom: 10px;
-}
+        .intro-section h2 {
+            color: #007bff;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
 
-.intro-section p {
-    font-size: 1.1em;
-    line-height: 1.5;
-    color: #555;
-}
+        .intro-section p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #555;
+        }
 
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .flashes li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .flashes .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .flashes .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .flashes .danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
@@ -111,12 +137,22 @@ body {
         <p>Manage your finances easily and efficiently</p>
     </div>
 
-    <!-- Navigation Links -->
-        <div class="auth-buttons">
-            <a href="{{ url_for('login') }}" class="login-button">Login</a>
-            <a href="{{ url_for('register') }}" class="register-button">Register</a>
-        </div>
+    <!-- Display flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
+    <!-- Navigation Links -->
+    <div class="auth-buttons">
+        <a href="{{ url_for('login') }}" class="login-button">Login</a>
+        <a href="{{ url_for('register') }}" class="register-button">Register</a>
+    </div>
 
     <!-- Introductory Section -->
     <div class="intro-section">
